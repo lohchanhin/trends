@@ -60,16 +60,16 @@ async def callback(request: Request):
 def handle_message(event: MessageEvent):
     if event.message.text.lower() == "查詢趨勢":
         trends = fetch_trends()  # 你需要替换为你的实现
-        for trend in trends:
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text=trend)
-            )
+        trends_text = "\n".join(trends)
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text=trends_text)
+        )
     elif event.message.text.lower() == "最新新聞":
         news = fetch_news()  # 你需要替换为你的实现
-        for news_item in news:
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text=news_item)
-            )
+        news_text = "\n".join(news)
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text=news_text)
+        )
 
 def fetch_trends():
   pytrends = TrendReq(hl='zh-TW', tz=360)
@@ -93,7 +93,7 @@ def fetch_trends():
     for article in news['articles']:
         trend_message = f"Title: {article['title']}\nDescription: {article['description']}\nURL: {article['url']}"
         trends_list.append(trend_message)
-
+    print(trends_list)
     return trends_list
   
 def fetch_news():
@@ -106,6 +106,8 @@ def fetch_news():
     for i in range(len(articles)):
         news_message = f"Title: {articles[i]['title']}\nDescription: {articles[i]['description']}\nURL: {articles[i]['url']}"
         news_list.append(news_message)
+    
+    print(news_list)
     return news_list
 
 
