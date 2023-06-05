@@ -1,0 +1,6 @@
+fastapi
+uvicorn  # 用于运行 FastAPI
+pytrends
+requests
+python-dotenv
+line-bot-sdk
