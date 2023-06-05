@@ -93,7 +93,7 @@ def fetch_trends():
     for article in news['articles']:
         trend_message = f"Title: {article['title']}\nDescription: {article['description']}\nURL: {article['url']}"
         trends_list.append(trend_message)
-    print(trends_list)
+    # print(trends_list)
     return trends_list
   
 def fetch_news():
@@ -107,7 +107,7 @@ def fetch_news():
         news_message = f"Title: {articles[i]['title']}\nDescription: {articles[i]['description']}\nURL: {articles[i]['url']}"
         news_list.append(news_message)
     
-    print(news_list)
+    # print(news_list)
     return news_list
 
 
