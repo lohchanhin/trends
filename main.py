@@ -72,28 +72,26 @@ def handle_message(event: MessageEvent):
         )
 
 def fetch_trends():
-  pytrends = TrendReq(hl='zh-TW', tz=360)
-  # 获取实时热门搜索
-  trending_searches_df = pytrends.trending_searches(pn='taiwan')
-  keywords =  trending_searches_df.head()
-  # 对每个关键词，获取相关新闻
-  trends_list = []  # 用于存储趋势消息
-  for keyword in keywords[0]:
-    url = f"https://gnews.io/api/v4/search?q={keyword}&token={apiKey}&lang=zh-TW&from={from_date_str}&to={to_date_str}"
-    response = requests.get(url)
-    news = json.loads(response.text)
-    
-    #print(news)
-    # 检查是否存在 'articles' 键
-    if 'articles' not in news:
-        #print(f"No articles found for keyword: {keyword}")
-        continue
+    pytrends = TrendReq(hl='zh-TW', tz=360)
+    # 获取实时热门搜索
+    trending_searches_df = pytrends.trending_searches(pn='taiwan')
+    keywords =  trending_searches_df.head()
+    # 对每个关键词，获取相关新闻
+    trends_list = []  # 用于存储趋势消息
+    trends_list.append("目前google熱門搜尋趨勢是以下5種：")
 
+    for i, keyword in enumerate(keywords[0]):
+        url = f"https://gnews.io/api/v4/search?q={keyword}&token={apiKey}&lang=zh-TW&from={from_date_str}&to={to_date_str}"
+        response = requests.get(url)
+        news = json.loads(response.text)
 
-    for article in news['articles']:
-        trend_message = f"Title: {article['title']}\nDescription: {article['description']}\nURL: {article['url']}"
-        trends_list.append(trend_message)
-    # print(trends_list)
+        # 检查是否存在 'articles' 键
+        if 'articles' not in news or len(news['articles']) == 0:
+            trends_list.append(f"{i+1} {keyword}: 無")
+        else:
+            article = news['articles'][0]
+            trends_list.append(f"{i+1} {keyword}相關新聞如下：\nTitle: {article['title']}\nDescription: {article['description']}\nURL: {article['url']}")
+
     return trends_list
   
 def fetch_news():
